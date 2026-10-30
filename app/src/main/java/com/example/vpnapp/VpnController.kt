@@ -10,7 +10,7 @@ import java.util.concurrent.Executors
 
 /**
  * Wraps the WireGuard engine.
- * It is a single object per process, so the tunnel state survives Activity restarts.
+ * One object per process, so the tunnel state survives Activity restarts.
  */
 object VpnController {
 
@@ -21,10 +21,25 @@ object VpnController {
     var activeServerName: String? = null
         private set
 
+    /** True while the user wants the tunnel up. Lets us tell a user disconnect from an unexpected drop. */
+    @Volatile
+    private var wantUp = false
+
+    /** Called (on the engine's thread) when the tunnel goes down without the user asking. */
+    @Volatile
+    var onUnexpectedDrop: (() -> Unit)? = null
+
     // The engine identifies the tunnel by instance, so this must stay the same object.
     private val tunnel = object : Tunnel {
         override fun getName(): String = "vpnapp"
-        override fun onStateChange(newState: Tunnel.State) {}
+
+        override fun onStateChange(newState: Tunnel.State) {
+            if (newState == Tunnel.State.DOWN && wantUp) {
+                wantUp = false
+                activeServerName = null
+                onUnexpectedDrop?.invoke()
+            }
+        }
     }
 
     fun init(context: Context) {
@@ -36,13 +51,33 @@ object VpnController {
     fun isUp(): Boolean =
         ::backend.isInitialized && backend.getState(tunnel) == Tunnel.State.UP
 
+    /** Total bytes (received, sent) through the tunnel, or null when it is not running. */
+    fun totals(): Pair<Long, Long>? {
+        if (!::backend.isInitialized || backend.getState(tunnel) != Tunnel.State.UP) return null
+        return try {
+            val stats = backend.getStatistics(tunnel)
+            Pair(stats.totalRx(), stats.totalTx())
+        } catch (t: Throwable) {
+            null
+        }
+    }
+
+    /** Checks that a text is a WireGuard config the engine can read. */
+    fun isValidConfig(text: String): Boolean = try {
+        Config.parse(BufferedReader(StringReader(text)))
+        true
+    } catch (t: Throwable) {
+        false
+    }
+
     /** Starts the tunnel. Only call this after VpnService.prepare() was granted. */
     fun connect(server: Server, onDone: (Throwable?) -> Unit) {
         executor.execute {
             val error: Throwable? = try {
-                val config = Config.parse(BufferedReader(StringReader(server.toWireGuardConfig())))
+                val config = Config.parse(BufferedReader(StringReader(server.config)))
                 backend.setState(tunnel, Tunnel.State.UP, config)
                 activeServerName = server.name
+                wantUp = true
                 null
             } catch (t: Throwable) {
                 t
@@ -53,6 +88,7 @@ object VpnController {
 
     fun disconnect(onDone: (Throwable?) -> Unit) {
         executor.execute {
+            wantUp = false
             val error: Throwable? = try {
                 backend.setState(tunnel, Tunnel.State.DOWN, null)
                 activeServerName = null

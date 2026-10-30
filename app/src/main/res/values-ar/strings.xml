@@ -7,9 +7,21 @@
     <string name="status_connected">متصل: %1$s</string>
     <string name="btn_connect">اتصال</string>
     <string name="btn_disconnect">قطع الاتصال</string>
+    <string name="btn_save">حفظ</string>
+    <string name="btn_delete">حذف</string>
     <string name="premium_locked">هذا السيرفر يتطلب اشتراكاً مدفوعاً</string>
     <string name="no_server_selected">اختر سيرفراً أولاً</string>
     <string name="vpn_error">خطأ في VPN: %1$s</string>
     <string name="vpn_permission_denied">تم رفض إذن إنشاء VPN</string>
     <string name="servers_load_error">تعذر تحميل قائمة السيرفرات</string>
+    <string name="speed_format">تنزيل %1$s · رفع %2$s · المجموع %3$s</string>
+    <string name="import_button">استيراد ملف إعدادات</string>
+    <string name="import_name_title">اسم السيرفر</string>
+    <string name="import_invalid">هذا الملف ليس إعدادات WireGuard صحيحة</string>
+    <string name="imported_country">مستورد</string>
+    <string name="imported_default_name">سيرفري</string>
+    <string name="delete_title">تحذف هذا السيرفر؟</string>
+    <string name="connection_dropped">انقطع الاتصال</string>
+    <string name="auto_connect">اتصال تلقائي عند فتح التطبيق</string>
+    <string name="auto_switch">تبديل السيرفر تلقائياً إذا انقطع الاتصال</string>
 </resources>

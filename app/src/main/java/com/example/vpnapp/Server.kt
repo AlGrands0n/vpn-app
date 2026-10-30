@@ -1,27 +1,17 @@
 package com.example.vpnapp
 
-/** One VPN server. Values come from assets/servers.json. */
+/**
+ * One VPN server.
+ * `config` is the full WireGuard config text (keys included).
+ * `imported` is true for configs the user added from their phone.
+ */
 data class Server(
     val name: String,
     val country: String,
     val premium: Boolean,
-    val clientAddress: String,
-    val clientPrivateKey: String,
-    val dns: String,
-    val serverPublicKey: String,
-    val endpoint: String,
+    val config: String,
+    val imported: Boolean = false,
 ) {
-    /** Builds the WireGuard config text that the tunnel engine expects. */
-    fun toWireGuardConfig(): String = """
-        [Interface]
-        PrivateKey = $clientPrivateKey
-        Address = $clientAddress
-        DNS = $dns
-
-        [Peer]
-        PublicKey = $serverPublicKey
-        AllowedIPs = 0.0.0.0/0, ::/0
-        Endpoint = $endpoint
-        PersistentKeepalive = 25
-    """.trimIndent()
+    val id: String
+        get() = "$country|$name"
 }

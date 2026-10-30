@@ -7,9 +7,21 @@
     <string name="status_connected">Connected: %1$s</string>
     <string name="btn_connect">Connect</string>
     <string name="btn_disconnect">Disconnect</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_delete">Delete</string>
     <string name="premium_locked">This server requires a paid plan</string>
     <string name="no_server_selected">Choose a server first</string>
     <string name="vpn_error">VPN error: %1$s</string>
     <string name="vpn_permission_denied">VPN permission was denied</string>
     <string name="servers_load_error">Could not load the server list</string>
+    <string name="speed_format">Download %1$s · Upload %2$s · Total %3$s</string>
+    <string name="import_button">Import config file</string>
+    <string name="import_name_title">Server name</string>
+    <string name="import_invalid">This file is not a valid WireGuard config</string>
+    <string name="imported_country">Imported</string>
+    <string name="imported_default_name">My server</string>
+    <string name="delete_title">Delete this server?</string>
+    <string name="connection_dropped">Connection dropped</string>
+    <string name="auto_connect">Connect automatically when the app opens</string>
+    <string name="auto_switch">Switch to another server if the connection drops</string>
 </resources>
