@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VPN App</string>
+    <string name="status_disconnected">Disconnected</string>
+    <string name="status_connecting">Connecting…</string>
+    <string name="status_disconnecting">Disconnecting…</string>
+    <string name="status_connected">Connected: %1$s</string>
+    <string name="btn_connect">Connect</string>
+    <string name="btn_disconnect">Disconnect</string>
+    <string name="premium_locked">This server requires a paid plan</string>
+    <string name="no_server_selected">Choose a server first</string>
+    <string name="vpn_error">VPN error: %1$s</string>
+    <string name="vpn_permission_denied">VPN permission was denied</string>
+    <string name="servers_load_error">Could not load the server list</string>
+</resources>
